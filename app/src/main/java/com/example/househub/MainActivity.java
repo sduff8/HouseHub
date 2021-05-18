@@ -12,6 +12,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //TEST TEXT 2
-
+        // Domo Arigato Mr.Roboto
     }
 }
