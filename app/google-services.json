@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "222762421277",
+    "project_id": "househub-6d841",
+    "storage_bucket": "househub-6d841.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:222762421277:android:dfd5bebefe8ee919efcaf4",
+        "android_client_info": {
+          "package_name": "com.example.househub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "222762421277-kgor1sgmku911ppe2knorhae3pu0v2j2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpp6WTmc0f6DlM_OVuFmTGFG5uMrfjmSs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "222762421277-kgor1sgmku911ppe2knorhae3pu0v2j2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

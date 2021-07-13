@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="@string/home"
+        android:icon="@drawable/ic_home"
+        android:id="@+id/homeFragment"/>
+    <item
+        android:title="@string/chat"
+        android:icon="@drawable/ic_chat"
+        android:id="@+id/chatFragment"/>
+
+    <item
+        android:title="@string/gallery"
+        android:icon="@drawable/ic_photo_library"
+        android:id="@+id/galleryFragment"/>
+    <item
+        android:title="@string/calendar"
+        android:icon="@drawable/ic_calendar"
+        android:id="@+id/calendarFragment"
+        />
+    <item
+        android:title="@string/contacts"
+        android:icon="@drawable/ic_phone"
+        android:id="@+id/contactsFragment"/>
+
+</menu>

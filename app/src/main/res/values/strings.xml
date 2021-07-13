@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">HouseHub</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="signup">Signup</string>
+    <string name="loginhere">Already have an account? Login</string>
+    <string name="signuphere">Create a new account? Sign up</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="email">Email</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home">Home</string>
+    <string name="chat">Chat</string>
+    <string name="gallery">Gallery</string>
+    <string name="calendar">Calendar</string>
+    <string name="contacts">Contacts</string>
+    <string name="back"><![CDATA[<-]]></string>
+    <string name="forward"><![CDATA[->]]></string>
 </resources>
