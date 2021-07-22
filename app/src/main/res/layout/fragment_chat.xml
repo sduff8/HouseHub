@@ -7,11 +7,30 @@
     tools:context=".ChatFragment">
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/recyclerView"
-        android:layout_above="@id/messageEdit"/>
+
+   <ScrollView
+       android:id="@+id/chat_scroll_view"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_alignParentTop="true"
+       android:layout_above="@+id/sendBtn">
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical">
+
+           <TextView
+               android:id="@+id/chat_text_display"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:padding="10dp"
+               android:textAllCaps="false"
+               android:textSize="20sp"
+               android:background="@color/white"/>
+
+       </LinearLayout>
+   </ScrollView>
 
     <EditText
         android:layout_width="match_parent"
@@ -21,12 +40,10 @@
         android:hint="Message..."
         android:textSize="16sp"
         android:layout_toStartOf="@id/sendBtn"
-        android:layout_toLeftOf="@id/sendBtn"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginBottom="16dp"
-        android:id="@+id/messageEdit" />
+        android:id="@+id/sendMessageEdit" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,25 +52,23 @@
         android:padding="10dp"
         android:visibility="invisible"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="16dp"
         android:id="@+id/sendBtn"
         android:textColor="@color/colorPrimary"/>
 
 
-    <ImageView
+    <ImageButton
+        android:id="@+id/sendButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_image"
+        android:src="@drawable/ic_send_message"
         android:padding="8dp"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@id/messageEdit"
-        android:layout_toRightOf="@id/messageEdit"
+        android:layout_toEndOf="@id/sendMessageEdit"
         android:layout_marginBottom="16dp"
-        android:id="@+id/pickImgBtn"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        app:tint="@color/colorPrimary" />
+        app:tint="@color/colorPrimary"
+        android:background="@color/white"/>
 
 </RelativeLayout>

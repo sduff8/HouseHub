@@ -2,11 +2,22 @@ package com.example.househub;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ScrollView;
+import android.widget.Scroller;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +34,16 @@ public class ChatFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
+    private DatabaseReference databaseRef;
+
+    private ImageButton sendButton;
+    private EditText sendMessageEdit;
+    private ScrollView mScrollView;
+    private TextView displayTextMessages;
+
 
     public ChatFragment() {
         // Required empty public constructor
@@ -61,4 +82,23 @@ public class ChatFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_chat, container, false);
     }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        databaseRef = FirebaseDatabase.getInstance().getReference();
+
+        sendButton = view.findViewById(R.id.sendButton);
+        sendMessageEdit = view.findViewById(R.id.sendMessageEdit);
+        displayTextMessages = view.findViewById(R.id.chat_text_display);
+        mScrollView = view.findViewById(R.id.chat_scroll_view);
+
+
+    }
+
+    //private void sendMessage(String sender, String receiver)
+
 }

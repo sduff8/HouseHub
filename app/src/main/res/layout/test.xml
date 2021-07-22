@@ -1,80 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent">
-
-<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="50dp"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    tools:context=".ChatFragment">
 
-    <TextView
-        android:id="@+id/loginText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        android:textSize="30sp" />
-</LinearLayout>
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginTop="150dp"
-    >
-
-    <TextView
-        android:id="@+id/usernameText"
-        android:layout_width="134dp"
-        android:layout_height="wrap_content"
-        android:text="@string/username"
-        android:textSize="25sp" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recyclerView"
+        android:layout_above="@id/sendMessageEdit"/>
 
     <EditText
-        android:id="@+id/editUsername"
-        android:layout_width="241dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName" />
-
-</LinearLayout>
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="250dp"
-    android:orientation="horizontal">
+        android:background="@drawable/edittext_design"
+        android:padding="8dp"
+        android:hint="Message..."
+        android:textSize="16sp"
+        android:layout_toStartOf="@id/sendBtn"
+        android:layout_toLeftOf="@id/sendBtn"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="16dp"
+        android:id="@+id/sendMessageEdit" />
 
     <TextView
-        android:id="@+id/passwordText"
-        android:layout_width="132dp"
-        android:layout_height="wrap_content"
-        android:text="Password:"
-        android:textSize="25sp" />
-
-    <EditText
-        android:id="@+id/editPassword"
-        android:layout_width="240dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPassword" />
-</LinearLayout>
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginTop="400dp"
-    android:gravity="center"
-    >
-
-
-    <Button
-        android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login" />
-</LinearLayout>
+        android:text="Send"
+        android:padding="10dp"
+        android:visibility="invisible"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="16dp"
+        android:id="@+id/sendBtn"
+        android:textColor="@color/colorPrimary"/>
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_send_message"
+        android:padding="8dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@id/sendMessageEdit"
+        android:layout_toRightOf="@id/sendMessageEdit"
+        android:layout_marginBottom="16dp"
+        android:id="@+id/sendButton"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        app:tint="@color/colorPrimary" />
+
 </RelativeLayout>
