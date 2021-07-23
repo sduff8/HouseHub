@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private String currentUserID;
     private FirebaseUser currentUser;
     private FirebaseAuth mAuth;
-    private DatabaseReference databaseRef;
+    private DatabaseReference databaseRef, FamilyRef;
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -54,6 +55,20 @@ public class MainActivity extends AppCompatActivity {
 
         //Objects.requireNonNull(getSupportActionBar()).hide();
         //getWindow().addFlags((WindowManager.LayoutParams.FLAG_FULLSCREEN));
+
+        //Get Family Table Reference
+        databaseRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                String familyId = snapshot.child("Family").getValue().toString();
+                GlobalVars.setFamilyNameId(familyId);
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
 
         mToolbar = findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
@@ -73,6 +88,10 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.chatFragment:
                     fragment = new ChatFragment();
+                    //FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    //Bundle bundle = new Bundle();
+                    //bundle.putString("familyNameId", familyNameId);
+                    //fragment.setArguments(bundle);
                     break;
 
                 case R.id.galleryFragment:
@@ -203,7 +222,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(familySettingsIntent);
         finish();
     }
-
 
     /*private void RequestNewGroup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.AlertDialog);
