@@ -128,6 +128,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
 
+        if (item.getItemId() == R.id.add_friends){
+            sendUserToFindFriendsActivity();
+        }
+
         if (item.getItemId() == R.id.family_settings){
             sendUserToFamilySettingsActivity();
         }
@@ -180,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
     private void VerifyUser() {
         String currentUserID = mAuth.getCurrentUser().getUid();
 
-        databaseRef.child("Users").child(currentUserID).child("Profile").addValueEventListener(new ValueEventListener() {
+        databaseRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if (snapshot.exists() && (snapshot.hasChild("name"))){
@@ -205,9 +209,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendUserToEditProfile() {
         Intent editProfileIntent = new Intent(MainActivity.this, EditProfileActivity.class);
-        editProfileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(editProfileIntent);
-        finish();
     }
 
     private void sendUserToLoginActivity() {
@@ -220,6 +222,13 @@ public class MainActivity extends AppCompatActivity {
         Intent familySettingsIntent = new Intent(MainActivity.this, FamilySettingsActivity.class);
         familySettingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(familySettingsIntent);
+        finish();
+    }
+
+    private void sendUserToFindFriendsActivity() {
+        Intent addFriendsIntent = new Intent(MainActivity.this, FindFriendsActivity.class);
+        addFriendsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(addFriendsIntent);
         finish();
     }
 

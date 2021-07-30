@@ -1,4 +1,4 @@
-package com.example.househub;
+ package com.example.househub;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -7,8 +7,10 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -43,6 +46,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private Button editProfile;
     private EditText username;
     private CircleImageView userProfileImage;
+    private Toolbar mToolbar;
 
     private String currentUserID;
     private FirebaseAuth mAuth;
@@ -50,6 +54,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private static final int GalleryPick = 1;
     private StorageReference UserProfileImagesRef;
+    //private ProgressDialog loadingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +69,12 @@ public class EditProfileActivity extends AppCompatActivity {
         username = findViewById(R.id.name_set);
         userProfileImage = findViewById(R.id.profile_image_set);
         UserProfileImagesRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
+
+        mToolbar = findViewById(R.id.edit_profile_page_toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Edit Profile");
 
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,19 +170,20 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void RetrieveUserProfile() {
-        databaseRef.child("Users").child(currentUserID).child("Profile").addValueEventListener(new ValueEventListener() {
+        databaseRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if (snapshot.exists() && (snapshot.hasChild("name"))){
                     String retrieveName = snapshot.child("name").getValue().toString();
                     username.setText(retrieveName);
                 }
-                //if (snapshot.exists() && (snapshot.hasChild("image"))){
-                    //String retrieveImage = snapshot.child("image").getValue().toString();
-                //}
-                else{
-                    Toast.makeText(EditProfileActivity.this, "Please Set Name", Toast.LENGTH_SHORT).show();
+                if (snapshot.exists() && (snapshot.hasChild("image"))){
+                    String retrieveImage = snapshot.child("image").getValue().toString();
+                    Picasso.get().load(retrieveImage).into(userProfileImage);
                 }
+                //else{
+                    //Toast.makeText(EditProfileActivity.this, "Please Set Name", Toast.LENGTH_SHORT).show();
+                //}
             }
 
             @Override
@@ -188,10 +200,10 @@ public class EditProfileActivity extends AppCompatActivity {
             Toast.makeText(EditProfileActivity.this, "Please Enter Name", Toast.LENGTH_SHORT).show();
         }
         else{
-            HashMap<String, String> profileMap = new HashMap<>();
+            HashMap<String, Object> profileMap = new HashMap<>();
             profileMap.put("uid", currentUserID);
             profileMap.put("name", setFullName);
-            databaseRef.child("Users").child(currentUserID).child("Profile").setValue(profileMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            databaseRef.child("Users").child(currentUserID).updateChildren(profileMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull @NotNull Task<Void> task) {
                     if (task.isSuccessful()){

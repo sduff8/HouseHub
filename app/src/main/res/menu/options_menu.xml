@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:title="Add Family Members"
+        android:id="@+id/add_friends"
+        app:showAsAction="never"
+        >
+    </item>
+
+    <item
         android:title="Family Settings"
         android:id="@+id/family_settings"
         app:showAsAction="never"

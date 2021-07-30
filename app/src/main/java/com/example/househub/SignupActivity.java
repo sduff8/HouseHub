@@ -19,6 +19,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -28,7 +33,7 @@ public class SignupActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     private FirebaseAuth mAuth;
-    private DatabaseReference databaseRef;
+    private DatabaseReference databaseRef, UsersRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,7 @@ public class SignupActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         databaseRef = FirebaseDatabase.getInstance().getReference();
+        UsersRef = databaseRef.child("Users");
 
         signupText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,10 +85,7 @@ public class SignupActivity extends AppCompatActivity {
                         String currentUserID = mAuth.getUid();
                         databaseRef.child("Users").child(currentUserID).setValue("");
 
-                        sendUserToMainActivity();
-                        Toast.makeText(SignupActivity.this, "Account Created", Toast.LENGTH_SHORT).show();
-                        progressBar.setVisibility(View.GONE);
-
+                        setUserFirebaseMessagingTokenAndSignup();
                     }
                     else{
                         String message = task.getException().toString();
@@ -105,6 +108,36 @@ public class SignupActivity extends AppCompatActivity {
         Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(loginIntent);
         finish();
+    }
+
+    public void setUserFirebaseMessagingTokenAndSignup() {
+        FirebaseMessaging.getInstance ().getToken ()
+                .addOnCompleteListener ( task -> {
+                    if (!task.isSuccessful ()) {
+                        //Could not get FirebaseMessagingToken
+                        return;
+                    }
+                    if (null != task.getResult ()) {
+                        //Got FirebaseMessagingToken
+                        String firebaseMessagingToken = Objects.requireNonNull ( task.getResult () );
+                        String currentUserID = mAuth.getCurrentUser().getUid();
+                        UsersRef.child(currentUserID).child("device_token").setValue(firebaseMessagingToken).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                if (task.isSuccessful()){
+                                    sendUserToMainActivity();
+                                    Toast.makeText(SignupActivity.this, "Account Created", Toast.LENGTH_SHORT).show();
+                                    progressBar.setVisibility(View.GONE);
+                                }
+                                else{
+                                    String message = task.getException().toString();
+                                    Toast.makeText(SignupActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
+                                    progressBar.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+                    }
+                } );
     }
 
 }

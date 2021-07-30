@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/message_profile_image"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/profile_image" />
+
+    <TextView
+        android:id="@+id/received_message_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Username"
+        android:layout_alignParentTop="true"
+        android:textSize="13sp"
+        android:layout_toEndOf="@id/message_profile_image"
+        android:textColor="@color/black"
+        android:layout_marginStart="10dp"/>
+
+    <TextView
+        android:id="@+id/received_message_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jan 1/2020"
+        android:layout_below="@+id/received_message_text"
+        android:textSize="11sp"
+        android:layout_alignEnd="@+id/received_message_text"/>
+
+
+    <TextView
+        android:id="@+id/received_message_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/message_profile_image"
+        android:layout_below="@+id/received_message_username"
+        android:background="@drawable/background_left"
+        android:text="Receiver Message Here"
+        android:padding="10dp"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:maxWidth="250dp"/>
+
+    <TextView
+        android:id="@+id/sender_message_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="@+id/received_message_text"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/received_message_username"
+        android:layout_marginEnd="5dp"
+        android:textAlignment="@+id/received_message_text"
+        android:background="@drawable/background_right"
+        android:maxWidth="250dp"
+        android:padding="10dp"
+        android:text="Sender Message "
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/sender_message_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jan 1/2020"
+        android:layout_below="@+id/sender_message_text"
+        android:textSize="11sp"
+        android:layout_alignEnd="@+id/sender_message_text"/>
+
+</RelativeLayout>
