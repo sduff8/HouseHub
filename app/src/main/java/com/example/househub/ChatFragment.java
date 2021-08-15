@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -76,10 +78,9 @@ public class ChatFragment extends Fragment {
     private DatabaseReference DatabaseRef, UsersRef ,FamilyRef, FamilyMessageKeyRef;
     private String currentUserId, currentUsername, currentDate, currentTime, familyNameId, senderUserId;
 
+    private Toolbar mToolbar;
     private ImageButton sendButton;
     private EditText sendMessageText;
-    //private ScrollView mScrollView;
-    //private TextView displayTextMessages;
     private RecyclerView mRecyclerView;
     private View chatFragmentView;
 
@@ -138,6 +139,10 @@ public class ChatFragment extends Fragment {
                              Bundle savedInstanceState) {
         chatFragmentView = inflater.inflate(R.layout.fragment_chat, container, false);
 
+        mToolbar = chatFragmentView.findViewById(R.id.chat_fragment_toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Family Chat");
+
         mAuth = FirebaseAuth.getInstance();
         currentUserId = mAuth.getCurrentUser().getUid();
         DatabaseRef = FirebaseDatabase.getInstance().getReference();
@@ -150,10 +155,8 @@ public class ChatFragment extends Fragment {
         //Initialize Fields
         sendButton = chatFragmentView.findViewById(R.id.sendButton);
         sendMessageText = chatFragmentView.findViewById(R.id.sendMessageEdit);
-        //displayTextMessages = chatFragmentView.findViewById(R.id.chat_text_display);
-        //mScrollView = chatFragmentView.findViewById(R.id.chat_scroll_view);
 
-        messagesAdapter = new MessagesAdapter(messagesList);
+        messagesAdapter = new MessagesAdapter(getContext(), messagesList);
         mRecyclerView = (RecyclerView) chatFragmentView.findViewById(R.id.chat_recycler_list);
         linearLayoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(linearLayoutManager);
@@ -168,8 +171,6 @@ public class ChatFragment extends Fragment {
                 SaveMessageToDatabase();
 
                 sendMessageText.setText("");
-
-                //mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
             }
         });
 
@@ -181,8 +182,6 @@ public class ChatFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        //displayTextMessages.setText("");
-
         FamilyRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
@@ -193,20 +192,11 @@ public class ChatFragment extends Fragment {
                 messagesAdapter.notifyDataSetChanged();
 
                 mRecyclerView.smoothScrollToPosition(Objects.requireNonNull(mRecyclerView.getAdapter()).getItemCount());
-                /*
-                if(snapshot.exists()){
-                    DisplayMessages(snapshot);
-                }
-                */
             }
 
             @Override
             public void onChildChanged(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-                /*
-                if(snapshot.exists()){
-                    DisplayMessages(snapshot);
-                }
-                */
+
             }
 
             @Override
@@ -346,23 +336,4 @@ public class ChatFragment extends Fragment {
         super.onPause();
         currentUser("none");
     }
-
-    /*
-    private void DisplayMessages(DataSnapshot dataSnapshot) {
-        Iterator iterator = dataSnapshot.getChildren().iterator();
-
-        while(iterator.hasNext()) {
-            String chatDate = (String) ((DataSnapshot)iterator.next()).getValue();
-            String chatMessage = (String) ((DataSnapshot)iterator.next()).getValue();
-            String chatName = (String) ((DataSnapshot)iterator.next()).getValue();
-            String chatTime = (String) ((DataSnapshot)iterator.next()).getValue();
-            String chatUid = (String) ((DataSnapshot)iterator.next()).getValue();
-            String type = (String) ((DataSnapshot)iterator.next()).getValue();
-
-            //displayTextMessages.append(chatName + " :\n" + chatMessage + " :\n" + chatTime + "     " + chatDate + "\n\n\n");
-
-            //mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
-        }
-    }
-     */
 }

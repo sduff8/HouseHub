@@ -1,87 +1,95 @@
- package com.example.househub;
+package com.example.househub;
 
- import android.app.ProgressDialog;
- import android.content.Intent;
- import android.net.Uri;
- import android.os.Bundle;
- import android.view.View;
- import android.widget.Button;
- import android.widget.EditText;
- import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
- import androidx.annotation.NonNull;
- import androidx.annotation.Nullable;
- import androidx.appcompat.app.AppCompatActivity;
- import androidx.appcompat.widget.Toolbar;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
- import com.bumptech.glide.Glide;
- import com.google.android.gms.tasks.Continuation;
- import com.google.android.gms.tasks.OnCompleteListener;
- import com.google.android.gms.tasks.Task;
- import com.google.firebase.auth.FirebaseAuth;
- import com.google.firebase.database.DataSnapshot;
- import com.google.firebase.database.DatabaseError;
- import com.google.firebase.database.DatabaseReference;
- import com.google.firebase.database.FirebaseDatabase;
- import com.google.firebase.database.ValueEventListener;
- import com.google.firebase.storage.FirebaseStorage;
- import com.google.firebase.storage.OnProgressListener;
- import com.google.firebase.storage.StorageReference;
- import com.google.firebase.storage.UploadTask;
- import com.theartofdev.edmodo.cropper.CropImage;
- import com.theartofdev.edmodo.cropper.CropImageView;
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
- import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.NotNull;
 
- import java.util.HashMap;
+import java.util.HashMap;
 
- import de.hdodenhof.circleimageview.CircleImageView;
+public class FamilySettingsProfileActivity extends AppCompatActivity {
 
- public class EditProfileActivity extends AppCompatActivity {
-
-    private Button editProfile;
-    private EditText username;
-    private CircleImageView userProfileImage;
     private Toolbar mToolbar;
 
-    private String currentUserID;
+    private EditText familyNameSet;
+    private Button updateFamilyButton;
+    private TextView familyInviteId;
+    private ImageView familyImage;
+    //private ProgressBar progressBar;
+
+    private String currentUserID, familyNameId;
     private FirebaseAuth mAuth;
     private DatabaseReference databaseRef;
+    private StorageReference FamilyImagesRef;
 
     private static final int GalleryPick = 1;
-    private StorageReference UserProfileImagesRef;
-    //private ProgressDialog loadingBar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_profile);
+        setContentView(R.layout.activity_family_settings_profile);
+
+        familyNameSet = findViewById(R.id.family_name_set);
+        updateFamilyButton = findViewById(R.id.create_family_button);
+        familyInviteId = findViewById(R.id.family_invite_id);
+        familyImage = findViewById(R.id.family_image);
+        //progressBar = findViewById(R.id.signupProgress);
+
+        familyNameId = GlobalVars.getFamilyNameId();
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         databaseRef = FirebaseDatabase.getInstance().getReference();
 
-        editProfile = findViewById(R.id.update_profile_button);
-        username = findViewById(R.id.name_set);
-        userProfileImage = findViewById(R.id.profile_image_set);
-        UserProfileImagesRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
+        FamilyImagesRef = FirebaseStorage.getInstance().getReference().child("Family Images");
 
-        mToolbar = findViewById(R.id.edit_profile_page_toolbar);
+        mToolbar = findViewById(R.id.family_settings_profile_page_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle("Edit Profile");
+        getSupportActionBar().setTitle("Family Settings");
 
-        editProfile.setOnClickListener(new View.OnClickListener() {
+        familyInviteId.setText(familyNameId);
+
+        RetrieveFamilyProfile();
+
+        updateFamilyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UpdateProfileInformation();
+                UpdateFamilyInformation();
             }
         });
 
-        RetrieveUserProfile();
-
-        userProfileImage.setOnClickListener(new View.OnClickListener() {
+        familyImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent galleryIntent = new Intent();
@@ -113,11 +121,11 @@
                 Uri resultUri = result.getUri();
 
                 final ProgressDialog progressDialog = new ProgressDialog(this);
-                progressDialog.setTitle("Uploading Profile Image...");
+                progressDialog.setTitle("Uploading Family Image...");
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
 
-                final StorageReference filePath = UserProfileImagesRef.child(currentUserID + ".jpg");
+                final StorageReference filePath = FamilyImagesRef.child(currentUserID + ".jpg");
 
                 UploadTask uploadTask= (UploadTask) filePath.putFile(resultUri).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -142,17 +150,17 @@
                         if (task.isSuccessful()) {
                             progressDialog.dismiss();
                             Uri downloadUri = task.getResult();
-                            Toast.makeText(EditProfileActivity.this, "Successfully uploaded", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FamilySettingsProfileActivity.this, "Successfully uploaded", Toast.LENGTH_SHORT).show();
                             if (downloadUri != null) {
 
                                 String downloadUrl = downloadUri.toString(); //YOU WILL GET THE DOWNLOAD URL HERE !!!!
-                                databaseRef.child("Users").child(currentUserID).child("image").setValue(downloadUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                databaseRef.child("Families").child(familyNameId).child("image").setValue(downloadUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
 
                                         if(!task.isSuccessful()){
                                             String error=task.getException().toString();
-                                            Toast.makeText(EditProfileActivity.this,"Error : "+error,Toast.LENGTH_LONG).show();
+                                            Toast.makeText(FamilySettingsProfileActivity.this,"Error : "+error,Toast.LENGTH_LONG).show();
                                         }else{
 
                                         }
@@ -163,7 +171,7 @@
                         } else {
                             // Handle failures
                             // ...
-                            Toast.makeText(EditProfileActivity.this,"Error",Toast.LENGTH_LONG).show();
+                            Toast.makeText(FamilySettingsProfileActivity.this,"Error",Toast.LENGTH_LONG).show();
                             //loadingBar.dismiss();
                         }
                     }
@@ -172,17 +180,17 @@
         }
     }
 
-    private void RetrieveUserProfile() {
-        databaseRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
+    private void RetrieveFamilyProfile() {
+        databaseRef.child("Families").child(familyNameId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if (snapshot.exists() && (snapshot.hasChild("name"))){
                     String retrieveName = snapshot.child("name").getValue().toString();
-                    username.setText(retrieveName);
+                    familyNameSet.setText(retrieveName);
                 }
                 if (snapshot.exists() && (snapshot.hasChild("image"))){
                     String retrieveImage = snapshot.child("image").getValue().toString();
-                    Glide.with(getApplicationContext()).load(retrieveImage).into(userProfileImage);
+                    Glide.with(getApplicationContext()).load(retrieveImage).into(familyImage);
                 }
             }
 
@@ -193,26 +201,26 @@
         });
     }
 
-    private void UpdateProfileInformation() {
-        String setFullName = String.valueOf(username.getText());
+    private void UpdateFamilyInformation() {
+        String setFullName = String.valueOf(familyNameSet.getText());
 
         if (setFullName.equals("")){
-            Toast.makeText(EditProfileActivity.this, "Please Enter Name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(FamilySettingsProfileActivity.this, "Please Enter Family Name", Toast.LENGTH_SHORT).show();
         }
         else{
             HashMap<String, Object> profileMap = new HashMap<>();
-            profileMap.put("uid", currentUserID);
+            profileMap.put("fid", familyNameId);
             profileMap.put("name", setFullName);
-            databaseRef.child("Users").child(currentUserID).updateChildren(profileMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            databaseRef.child("Families").child(familyNameId).updateChildren(profileMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull @NotNull Task<Void> task) {
                     if (task.isSuccessful()){
-                        Toast.makeText(EditProfileActivity.this, "Profile Updated Successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FamilySettingsProfileActivity.this, "Family Updated Successfully", Toast.LENGTH_SHORT).show();
                         sendUserToMainActivity();
                     }
                     else{
                         String message = task.getException().toString();
-                        Toast.makeText(EditProfileActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FamilySettingsProfileActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -220,10 +228,9 @@
     }
 
     private void sendUserToMainActivity() {
-        Intent mainIntent = new Intent(EditProfileActivity.this, MainActivity.class);
+        Intent mainIntent = new Intent(FamilySettingsProfileActivity.this, MainActivity.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(mainIntent);
         finish();
     }
-
 }

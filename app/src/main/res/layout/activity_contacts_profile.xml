@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditProfileActivity">
+
+    <include
+        android:id="@+id/contact_profile_page_toolbar"
+        layout="@layout/app_bar_layout" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/contact_image_set"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:src="@drawable/profile_image"
+        android:layout_below="@id/contact_profile_page_toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
+        app:civ_border_width="5dp"
+        app:civ_border_color="#FF000000"/>
+
+    <EditText
+        android:id="@+id/contact_name_set"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/contact_image_set"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="15dp"
+        android:drawableStart="@drawable/ic_username"
+        android:hint="Name"
+        android:background="@drawable/edittext_design"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:padding="6dp"
+        />
+
+    <EditText
+        android:id="@+id/contact_phone_set"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/contact_name_set"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:drawableStart="@drawable/ic_phone"
+        android:hint="Phone Number"
+        android:background="@drawable/edittext_design"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:padding="6dp"
+        />
+
+    <EditText
+        android:id="@+id/contact_address_set"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/contact_phone_set"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:drawableStart="@drawable/ic_home"
+        android:hint="Address"
+        android:background="@drawable/edittext_design"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:padding="6dp"
+        />
+
+
+
+
+    <Button
+        android:id="@+id/update_contact_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/contact_address_set"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="15dp"
+        android:text="Update"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@color/black" />
+
+
+</RelativeLayout>

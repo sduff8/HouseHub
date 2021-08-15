@@ -6,12 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".ChatFragment">
 
+    <include
+        android:id="@+id/chat_fragment_toolbar"
+        layout="@layout/app_bar_layout" />
 
    <androidx.recyclerview.widget.RecyclerView
        android:id="@+id/chat_recycler_list"
        android:layout_width="match_parent"
        android:layout_height="match_parent"
-       android:layout_alignParentTop="true"
+       android:layout_below="@+id/chat_fragment_toolbar"
        android:layout_above="@+id/chat_linear_layout">
 
    </androidx.recyclerview.widget.RecyclerView>

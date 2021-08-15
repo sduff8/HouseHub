@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -35,7 +36,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
-    private Toolbar mToolbar;
+    //private Toolbar mToolbar;
 
     private String currentUserID;
     private FirebaseUser currentUser;
@@ -57,11 +58,25 @@ public class MainActivity extends AppCompatActivity {
         //getWindow().addFlags((WindowManager.LayoutParams.FLAG_FULLSCREEN));
 
         //Get Family Table Reference
+
+        //ADD LOGIC FOR NEW REGISTERING USERS
         databaseRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                String familyId = snapshot.child("Family").getValue().toString();
-                GlobalVars.setFamilyNameId(familyId);
+                if (snapshot.exists() && (snapshot.hasChild("Family"))){
+                    databaseRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                            String familyId = snapshot.child("Family").getValue().toString();
+                            GlobalVars.setFamilyNameId(familyId);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                        }
+                    });
+                }
             }
 
             @Override
@@ -70,9 +85,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mToolbar = findViewById(R.id.main_page_toolbar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("HouseHub");
+//        databaseRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+//                String familyId = snapshot.child("Family").getValue().toString();
+//                GlobalVars.setFamilyNameId(familyId);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+//
+//            }
+//        });
+
+        //mToolbar = findViewById(R.id.main_page_toolbar);
+        //setSupportActionBar(mToolbar);
+        //getSupportActionBar().setTitle("HouseHub");
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new HomeFragment()).commit();
@@ -141,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (item.getItemId() == R.id.settings){
-
+            sendUserToFamilySettingsProfile();
         }
 
         if (item.getItemId() == R.id.logout){
@@ -149,6 +177,13 @@ public class MainActivity extends AppCompatActivity {
             sendUserToLoginActivity();
         }
         return true;
+    }
+
+    private void sendUserToFamilySettingsProfile() {
+        Intent familySettingsProfileIntent = new Intent(MainActivity.this, FamilySettingsProfileActivity.class);
+        familySettingsProfileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(familySettingsProfileIntent);
+        finish();
     }
 
     @Override
@@ -170,13 +205,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if (snapshot.child("family").exists()){
-                    enableBottomBar(true);
+                    //enableBottomBar(true);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                enableBottomBar(false);
+                //enableBottomBar(false);
             }
         });
     }
@@ -187,10 +222,7 @@ public class MainActivity extends AppCompatActivity {
         databaseRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                if (snapshot.exists() && (snapshot.hasChild("name"))){
-                    Toast.makeText(MainActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
-                }
-                else{
+                if (!(snapshot.exists() && (snapshot.hasChild("name")))){
                     sendUserToEditProfile();
                 }
             }

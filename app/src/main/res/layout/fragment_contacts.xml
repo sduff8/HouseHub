@@ -1,14 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ContactsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <include
+        android:id="@+id/contacts_fragment_toolbar"
+        layout="@layout/app_bar_layout" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/contacts_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Contact Fragment" />
+        android:layout_above="@+id/contacts_linear"
+        android:layout_below="@+id/contacts_fragment_toolbar">
 
-</FrameLayout>
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+        android:id="@+id/contacts_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/add_contacts_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/oval_shape"
+            android:text="+ Add Contact"
+            android:textSize="15sp"
+            android:textAllCaps="false"
+            android:padding="10dp"
+/>
+
+    </LinearLayout>
+</RelativeLayout>
+

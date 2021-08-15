@@ -14,12 +14,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 
+import com.bumptech.glide.Glide;
 import com.example.househub.Model.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -58,7 +58,7 @@ public class FindFriendsActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull @NotNull FindFriendsActivity.FindFriendsViewHolder holder, int position, @NonNull @NotNull User model) {
                 holder.username.setText(model.getName());
-                Picasso.get().load(model.getImage()).placeholder(R.drawable.profile_image).into(holder.profileImage);
+                Glide.with(FindFriendsActivity.this).load(model.getImage()).placeholder(R.drawable.profile_image).into(holder.profileImage);
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -17,4 +17,5 @@
     <string name="contacts">Contacts</string>
     <string name="back"><![CDATA[<-]]></string>
     <string name="forward"><![CDATA[->]]></string>
+    <string name="contacts_dialog_title">Enter Contact Information</string>
 </resources>

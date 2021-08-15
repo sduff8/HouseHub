@@ -1,14 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".GalleryFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <include
+        android:id="@+id/gallery_fragment_toolbar"
+        layout="@layout/app_bar_layout" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/gallery_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Gallery Fragment" />
+        android:layout_above="@+id/gallery_linear_layout"
+        android:layout_below="@+id/gallery_fragment_toolbar">
 
-</FrameLayout>
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+        android:id="@+id/gallery_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/add_image_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/oval_shape"
+            android:text="+ Upload Photo"
+            android:textSize="15sp"
+            android:textAllCaps="false"
+            android:padding="10dp"/>
+
+    </LinearLayout>
+</RelativeLayout>

@@ -1,7 +1,7 @@
 package com.example.househub;
 
+import android.content.Context;
 import android.graphics.Color;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.househub.Model.Messages;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -17,10 +18,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -28,11 +27,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MessageViewHolder> {
 
+    private Context context;
     private List<Messages> userMessagesList;
     private FirebaseAuth mAuth;
     private DatabaseReference UsersRef;
 
-    public MessagesAdapter(List<Messages> userMessagesList){
+    public MessagesAdapter(Context context, List<Messages> userMessagesList){
+        this.context = context;
         this.userMessagesList = userMessagesList;
     }
 
@@ -85,7 +86,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
                 if(snapshot.hasChild("image")){
                     String receiverImage = snapshot.child("image").getValue().toString();
 
-                    Picasso.get().load(receiverImage).placeholder(R.drawable.profile_image).into(holder.receiverProfileImage);
+                    Glide.with(context).load(receiverImage).placeholder(R.drawable.profile_image).into(holder.receiverProfileImage);
                 }
             }
 
