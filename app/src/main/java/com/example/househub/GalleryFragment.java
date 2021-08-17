@@ -5,31 +5,21 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.Toast;
-
-import com.example.househub.Model.Messages;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -37,7 +27,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -45,7 +34,6 @@ import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -66,7 +54,6 @@ public class GalleryFragment extends Fragment {
     private Toolbar mToolbar;
     private RecyclerView galleryRecyclerView;
     private GalleryAdapter adapter;
-    private Button addImage;
     private Uri imageUri;
 
     private FirebaseAuth mAuth;
@@ -118,10 +105,31 @@ public class GalleryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
 
         mToolbar = view.findViewById(R.id.gallery_fragment_toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Gallery");
 
-        addImage = view.findViewById(R.id.add_image_button);
+        mToolbar.setTitle("Gallery");
+        mToolbar.inflateMenu(R.menu.options_with_add_menu);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+
+                if(id == R.id.add){
+                    selectImage();
+                    return true;
+                }
+                if (id == R.id.settings){
+                    sendUserToSettingsActivity();
+                    return true;
+                }
+
+                if (id == R.id.logout){
+                    mAuth.signOut();
+                    sendUserToLoginActivity();
+                    return true;
+                }
+                return false;
+            }
+        });
 
         mAuth = FirebaseAuth.getInstance();
         currentUserId = mAuth.getCurrentUser().getUid();
@@ -138,13 +146,6 @@ public class GalleryFragment extends Fragment {
         galleryRecyclerView.setAdapter(adapter);
 
         getGalleryImages();
-
-        addImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectImage();
-            }
-        });
 
         return view;
     }
@@ -202,11 +203,10 @@ public class GalleryFragment extends Fragment {
                     Uri downloadUri = task.getResult();
                     Toast.makeText(getActivity(), "Successfully uploaded", Toast.LENGTH_SHORT).show();
                     if (downloadUri != null) {
-                        String downloadUrl = downloadUri.toString(); //YOU WILL GET THE DOWNLOAD URL HERE !!!!
+                        String downloadUrl = downloadUri.toString();
                         DatabaseRef.child("Gallery").child(familyNameId).child(randomKey).setValue(downloadUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                //loadingBar.dismiss();
                                 if (!task.isSuccessful()) {
                                     String error = task.getException().toString();
                                     Toast.makeText(getActivity(), "Error : " + error, Toast.LENGTH_LONG).show();
@@ -217,7 +217,6 @@ public class GalleryFragment extends Fragment {
 
                 } else {
                     Toast.makeText(getActivity(), "Error", Toast.LENGTH_LONG).show();
-                    //loadingBar.dismiss();
                 }
             }
         });
@@ -258,5 +257,18 @@ public class GalleryFragment extends Fragment {
 
             }
         });
+    }
+
+    private void sendUserToSettingsActivity() {
+        Intent settingsIntent = new Intent(getActivity(), SettingsActivity.class);
+        settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(settingsIntent);
+        requireActivity().finish();
+    }
+
+    private void sendUserToLoginActivity() {
+        Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(loginIntent);
+        requireActivity().finish();
     }
 }

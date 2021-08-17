@@ -3,6 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/add"
+        android:title="Add"
+        android:icon="@drawable/ic_add"
+        app:showAsAction="ifRoom|withText"
+        android:iconTint="@color/black">
+    </item>
+
+    <item
         android:title="Settings"
         android:id="@+id/settings"
         app:showAsAction="never"

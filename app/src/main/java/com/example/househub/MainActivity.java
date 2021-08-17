@@ -1,25 +1,15 @@
 package com.example.househub;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
-import android.widget.Toast;
-import androidx.appcompat.widget.Toolbar;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,17 +21,14 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
-    //private Toolbar mToolbar;
 
     private String currentUserID;
     private FirebaseUser currentUser;
     private FirebaseAuth mAuth;
-    private DatabaseReference databaseRef, FamilyRef;
+    private DatabaseReference databaseRef;
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -57,51 +44,6 @@ public class MainActivity extends AppCompatActivity {
         //Objects.requireNonNull(getSupportActionBar()).hide();
         //getWindow().addFlags((WindowManager.LayoutParams.FLAG_FULLSCREEN));
 
-        //Get Family Table Reference
-
-        //ADD LOGIC FOR NEW REGISTERING USERS
-        databaseRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                if (snapshot.exists() && (snapshot.hasChild("Family"))){
-                    databaseRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                            String familyId = snapshot.child("Family").getValue().toString();
-                            GlobalVars.setFamilyNameId(familyId);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
-
-//        databaseRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-//                String familyId = snapshot.child("Family").getValue().toString();
-//                GlobalVars.setFamilyNameId(familyId);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-//
-//            }
-//        });
-
-        //mToolbar = findViewById(R.id.main_page_toolbar);
-        //setSupportActionBar(mToolbar);
-        //getSupportActionBar().setTitle("HouseHub");
-
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerView, new HomeFragment()).commit();
         bottomNavigationView.setSelectedItemId(R.id.homeFragment);
@@ -116,10 +58,6 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.chatFragment:
                     fragment = new ChatFragment();
-                    //FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                    //Bundle bundle = new Bundle();
-                    //bundle.putString("familyNameId", familyNameId);
-                    //fragment.setArguments(bundle);
                     break;
 
                 case R.id.galleryFragment:
@@ -139,8 +77,6 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
         });
-
-        //CheckUserFamily();
     }
 
     @Override
@@ -156,20 +92,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
 
-        if (item.getItemId() == R.id.add_friends){
-            sendUserToFindFriendsActivity();
-        }
-
-        if (item.getItemId() == R.id.family_settings){
-            sendUserToFamilySettingsActivity();
-        }
-
-        if (item.getItemId() == R.id.update_profile){
-            sendUserToEditProfile();
-        }
-
         if (item.getItemId() == R.id.settings){
-            sendUserToFamilySettingsProfile();
+            sendUserToSettingsActivity();
         }
 
         if (item.getItemId() == R.id.logout){
@@ -177,13 +101,6 @@ public class MainActivity extends AppCompatActivity {
             sendUserToLoginActivity();
         }
         return true;
-    }
-
-    private void sendUserToFamilySettingsProfile() {
-        Intent familySettingsProfileIntent = new Intent(MainActivity.this, FamilySettingsProfileActivity.class);
-        familySettingsProfileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(familySettingsProfileIntent);
-        finish();
     }
 
     @Override
@@ -194,7 +111,8 @@ public class MainActivity extends AppCompatActivity {
             sendUserToLoginActivity();
         }
         else{
-            VerifyUser();
+            VerifyUserProfile();
+            CheckUserFamily();
         }
     }
 
@@ -204,19 +122,18 @@ public class MainActivity extends AppCompatActivity {
         databaseRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                if (snapshot.child("family").exists()){
-                    //enableBottomBar(true);
+                if (!(snapshot.exists() && (snapshot.hasChild("family")))){
+                    sendUserToFamilySettingsActivity();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                //enableBottomBar(false);
             }
         });
     }
 
-    private void VerifyUser() {
+    private void VerifyUserProfile() {
         String currentUserID = mAuth.getCurrentUser().getUid();
 
         databaseRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
@@ -231,12 +148,6 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
             }
         });
-    }
-
-    private void enableBottomBar(boolean enable){
-        for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
-            bottomNavigationView.getMenu().getItem(i).setEnabled(enable);
-        }
     }
 
     private void sendUserToEditProfile() {
@@ -257,51 +168,10 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    private void sendUserToFindFriendsActivity() {
-        Intent addFriendsIntent = new Intent(MainActivity.this, FindFriendsActivity.class);
-        addFriendsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(addFriendsIntent);
+    private void sendUserToSettingsActivity() {
+        Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+        settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(settingsIntent);
         finish();
     }
-
-    /*private void RequestNewGroup() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.AlertDialog);
-        builder.setTitle("Enter Family Name: ");
-
-        final EditText groupNameField = new EditText(MainActivity.this);
-        groupNameField.setHint("ex. The Duffs");
-        builder.setView(groupNameField);
-
-        builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String groupName = groupNameField.getText().toString();
-
-                if (TextUtils.isEmpty(groupName)){
-                    Toast.makeText(MainActivity.this, "Please Enter Family Name", Toast.LENGTH_SHORT);
-                }
-                else{
-                    CreateNewGroup(groupName);
-                }
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.show();
-    }
-
-    private void CreateNewGroup(String groupName) {
-        databaseRef.child("Groups").child(groupName).setValue("").addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull @NotNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(MainActivity.this, groupName + "was created successfully", Toast.LENGTH_SHORT);
-                }
-            }
-        });
-        */
 }

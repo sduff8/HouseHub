@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditProfileActivity">
+    tools:context=".EditProfileActivity"
+    android:background="@drawable/bluebackground">
 
     <include
         android:id="@+id/family_settings_profile_page_toolbar"
@@ -17,7 +18,7 @@
         android:layout_below="@id/family_settings_profile_page_toolbar"
         android:src="@drawable/profile_image"
         android:layout_marginTop="20dp"
-        />
+        android:scaleType="centerCrop"/>
 
     <EditText
         android:id="@+id/family_name_set"
@@ -44,7 +45,7 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="15dp"
-        android:backgroundTint="@color/colorPrimary"
+        android:backgroundTint="@color/lightGreen"
         android:text="Update"
         android:textAllCaps="false"
         android:textColor="@color/black"
@@ -56,10 +57,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/create_family_button"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:text="Family Invite Code"
+        android:layout_marginTop="50dp"
+        android:text="Family Invite Code "
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
 
     <TextView
         android:id="@+id/family_invite_id"
@@ -70,5 +72,18 @@
         android:layout_marginTop="15dp"
         android:text="234I234H5U43NUJ4H"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/family_invite_help_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/family_invite_id"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Use This Code for New Members to Join"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:textColor="@color/black"/>
 </RelativeLayout>

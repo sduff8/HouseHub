@@ -51,7 +51,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
             receiverProfileImage = (CircleImageView) itemView.findViewById(R.id.message_profile_image);
             receiverMessageDate = (TextView) itemView.findViewById(R.id.received_message_date);
             receiverMessageName = (TextView) itemView.findViewById(R.id.received_message_username);
-
         }
     }
 
@@ -85,8 +84,11 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if(snapshot.hasChild("image")){
                     String receiverImage = snapshot.child("image").getValue().toString();
-
-                    Glide.with(context).load(receiverImage).placeholder(R.drawable.profile_image).into(holder.receiverProfileImage);
+                    try {
+                        Glide.with(context).load(receiverImage).placeholder(R.drawable.profile_image).into(holder.receiverProfileImage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 

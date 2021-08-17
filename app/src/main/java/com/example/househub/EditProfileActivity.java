@@ -4,6 +4,7 @@
  import android.content.Intent;
  import android.net.Uri;
  import android.os.Bundle;
+ import android.view.MenuItem;
  import android.view.View;
  import android.widget.Button;
  import android.widget.EditText;
@@ -50,7 +51,6 @@
 
     private static final int GalleryPick = 1;
     private StorageReference UserProfileImagesRef;
-    //private ProgressDialog loadingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +71,7 @@
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("Edit Profile");
+
 
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,10 +162,7 @@
                             }
 
                         } else {
-                            // Handle failures
-                            // ...
                             Toast.makeText(EditProfileActivity.this,"Error",Toast.LENGTH_LONG).show();
-                            //loadingBar.dismiss();
                         }
                     }
                 });
@@ -218,6 +216,19 @@
             });
         }
     }
+
+     @Override
+     public boolean onOptionsItemSelected(MenuItem item) {
+         if (item.getItemId() == android.R.id.home) // Press Back Icon
+         {
+             Intent intent = new Intent(EditProfileActivity.this, SettingsActivity.class);
+             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+             startActivity(intent);
+             finish();
+             return true;
+         }
+         return super.onOptionsItemSelected(item);
+     }
 
     private void sendUserToMainActivity() {
         Intent mainIntent = new Intent(EditProfileActivity.this, MainActivity.class);

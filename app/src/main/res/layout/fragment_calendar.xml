@@ -2,58 +2,28 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CalendarFragment">
 
-    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <include
+        android:id="@+id/calendar_fragment_toolbar"
+        layout="@layout/app_bar_layout" />
+
+    <CalendarView
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:mcv_tileHeight="42dp"
-        app:mcv_dateTextAppearance="@style/largeCalFont"/>
+        android:dateTextAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:weekDayTextAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:layout_below="@+id/calendar_fragment_toolbar"
+        android:background="@drawable/grey_border_layout"/>
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="fill_parent"
-        android:layout_height="0.5dp"
-        android:background="#aaa"
-        android:layout_marginTop="16dp"
-        android:layout_below="@+id/calendarView"/>
-
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/eventList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/view"
-        android:layout_above="@id/footer">
-    </ListView>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="0.5dp"
-        android:background="#aaa"
-        android:layout_below="@+id/eventList"/>
-
-    <RelativeLayout android:id="@+id/footer"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/calendarView">
+    </androidx.recyclerview.widget.RecyclerView>
 
-        <Button android:id="@+id/todayButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Today"
-            android:background="?android:attr/selectableItemBackground"
-            android:textColor="#ff0000"/>
-
-        <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentRight="true"
-            android:background="@color/lightBlue"
-            android:src="@drawable/ic_add"/>
-    </RelativeLayout>
 </RelativeLayout>

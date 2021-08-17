@@ -5,60 +5,36 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:padding="12dp"
-        android:text="Title" />
 
     <EditText
-        android:id="@+id/title"
+        android:id="@+id/event_title_dialog"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp">
-
-        <requestFocus />
-    </EditText>
-
-    <TextView
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:padding="12dp"
-        android:text="Description" />
+        android:hint="Title:"/>
+
 
     <EditText
-        android:id="@+id/description"
+        android:id="@+id/event_description_dialog"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:padding="12dp"
-        android:text="Date" />
+        android:hint="Description:"/>
+
 
     <EditText
-        android:id="@+id/date"
+        android:id="@+id/event_time_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"/>
+        android:hint="Time: (ex. 10:00 AM)"
+        android:textSize="18sp" />
 
-    <TextView
+
+    <DatePicker
+        android:id="@+id/event_date_dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:padding="12dp"
-        android:text="Time" />
-
-    <EditText
-        android:id="@+id/time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"/>
+        android:layout_gravity="center"/>
 
 
 </LinearLayout>

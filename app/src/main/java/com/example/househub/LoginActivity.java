@@ -16,8 +16,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
     private DatabaseReference databaseRef, UsersRef;
 
     @Override
@@ -48,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.loginProgress);
 
         mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
         databaseRef = FirebaseDatabase.getInstance().getReference();
         UsersRef = databaseRef.child("Users");
 
@@ -77,7 +83,8 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()){
 
-                                setUserFirebaseMessagingTokenAndLogin();
+                                //setUserFirebaseMessagingTokenAndLogin();
+                                setFamilyIdAndLogin();
 
                             }
                             else{
@@ -92,11 +99,44 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (currentUser != null) {
+            setFamilyIdAndLogin();
+        }
+    }
+
     private void sendUserToMainActivity() {
         Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(mainIntent);
         finish();
+    }
+
+    private void setFamilyIdAndLogin(){
+        String currentUserID = mAuth.getCurrentUser().getUid();
+
+        databaseRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if (snapshot.exists() && (snapshot.hasChild("family"))) {
+                    String familyId = snapshot.child("family").getValue().toString();
+                    GlobalVars.setFamilyNameId(familyId);
+                    sendUserToMainActivity();
+                    progressBar.setVisibility(View.GONE);
+                }else {
+                    sendUserToMainActivity();
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void setUserFirebaseMessagingTokenAndLogin() {

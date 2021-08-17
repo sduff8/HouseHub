@@ -3,28 +3,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeFragment">
+    tools:context=".HomeFragment"
+    android:background="@drawable/bluebackground">
+
+    <include
+        android:id="@+id/home_fragment_toolbar"
+        layout="@layout/app_bar_layout" />
 
     <ImageView
         android:id="@+id/family_image_home"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:src="@drawable/profile_image"
-        android:adjustViewBounds="true"/>
+        android:layout_height="250dp"
+        android:adjustViewBounds="true"
+        android:layout_below="@+id/home_fragment_toolbar"
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/family_name_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/family_image_home"
+        android:fontFamily="@font/architects_daughter"
         android:gravity="center_horizontal"
-        android:text="The Hunts"
         android:textColor="@color/black"
-        android:textSize="30sp" />
+        android:textSize="35sp"
+        android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/home_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/family_name_home"
-        android:layout_marginTop="11dp" />
+        android:layout_marginTop="20dp" />
 </RelativeLayout>

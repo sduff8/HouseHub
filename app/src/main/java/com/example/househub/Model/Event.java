@@ -2,13 +2,13 @@ package com.example.househub.Model;
 
 public class Event {
 
-    private String type;
+    private String title;
     private String date;
     private String time;
     private String description;
 
-    public Event(String type, String date, String time, String description) {
-        this.type = type;
+    public Event(String title, String date, String time, String description) {
+        this.title = title;
         this.date = date;
         this.time = time;
         this.description = description;
@@ -17,12 +17,12 @@ public class Event {
     public Event() {
     }
 
-    public String getType() {
-        return type;
+    public String getTitle() {
+        return title;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDate() {

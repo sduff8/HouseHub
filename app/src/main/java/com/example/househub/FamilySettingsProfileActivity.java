@@ -1,20 +1,21 @@
 package com.example.househub;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Continuation;
@@ -30,8 +31,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -45,7 +44,6 @@ public class FamilySettingsProfileActivity extends AppCompatActivity {
     private Button updateFamilyButton;
     private TextView familyInviteId;
     private ImageView familyImage;
-    //private ProgressBar progressBar;
 
     private String currentUserID, familyNameId;
     private FirebaseAuth mAuth;
@@ -62,7 +60,6 @@ public class FamilySettingsProfileActivity extends AppCompatActivity {
         updateFamilyButton = findViewById(R.id.create_family_button);
         familyInviteId = findViewById(R.id.family_invite_id);
         familyImage = findViewById(R.id.family_image);
-        //progressBar = findViewById(R.id.signupProgress);
 
         familyNameId = GlobalVars.getFamilyNameId();
 
@@ -106,19 +103,8 @@ public class FamilySettingsProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == GalleryPick && resultCode == RESULT_OK && data!=null){
-            Uri ImageUri = data.getData();
+                Uri ImageUri = data.getData();
 
-            CropImage.activity()
-                    .setGuidelines(CropImageView.Guidelines.ON)
-                    .setAspectRatio(1,1)
-                    .start(this);
-        }
-
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-
-            if(resultCode == RESULT_OK){
-                Uri resultUri = result.getUri();
 
                 final ProgressDialog progressDialog = new ProgressDialog(this);
                 progressDialog.setTitle("Uploading Family Image...");
@@ -127,7 +113,7 @@ public class FamilySettingsProfileActivity extends AppCompatActivity {
 
                 final StorageReference filePath = FamilyImagesRef.child(currentUserID + ".jpg");
 
-                UploadTask uploadTask= (UploadTask) filePath.putFile(resultUri).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                UploadTask uploadTask= (UploadTask) filePath.putFile(ImageUri).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onProgress(@NonNull @NotNull UploadTask.TaskSnapshot snapshot) {
                         double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
@@ -176,7 +162,6 @@ public class FamilySettingsProfileActivity extends AppCompatActivity {
                         }
                     }
                 });
-            }
         }
     }
 
@@ -226,6 +211,20 @@ public class FamilySettingsProfileActivity extends AppCompatActivity {
             });
         }
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) // Press Back Icon
+        {
+            Intent intent = new Intent(FamilySettingsProfileActivity.this, SettingsActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void sendUserToMainActivity() {
         Intent mainIntent = new Intent(FamilySettingsProfileActivity.this, MainActivity.class);

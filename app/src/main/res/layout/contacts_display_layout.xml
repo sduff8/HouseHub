@@ -53,7 +53,7 @@
                     android:id="@+id/contacts_phone_number"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="(709) 699-2713"
+                    android:text="(111) 111-1111"
                     android:textAlignment="textStart"
                     android:textSize="15sp"
                     />
@@ -79,7 +79,7 @@
                     android:id="@+id/address_contacts"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="76 Chamberlains Road "
+                    android:text="123 Road "
                     android:textAlignment="textStart"
                     android:textSize="15sp"
 

@@ -1,19 +1,19 @@
 package com.example.househub;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Continuation;
@@ -35,7 +35,6 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -45,7 +44,6 @@ public class ContactsProfileActivity extends AppCompatActivity {
     private EditText username, phone, address;
     private CircleImageView contactImage;
     private Toolbar mToolbar;
-    private Uri imageUri;
 
     private String currentUserID, visitContactId, contactName, familyNameId;
     private FirebaseAuth mAuth;
@@ -55,7 +53,6 @@ public class ContactsProfileActivity extends AppCompatActivity {
 
     private static final int ContactPick = 1;
     private StorageReference ContactImagesRef;
-    //private ProgressDialog loadingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,8 +143,6 @@ public class ContactsProfileActivity extends AppCompatActivity {
                         if (!task.isSuccessful()) {
                             throw task.getException();
                         }
-
-                        // Continue with the task to get the download URL
                         return filePath.getDownloadUrl();
                     }
                 }).addOnCompleteListener(new OnCompleteListener<Uri>() {
@@ -175,10 +170,7 @@ public class ContactsProfileActivity extends AppCompatActivity {
                             }
 
                         } else {
-                            // Handle failures
-                            // ...
                             Toast.makeText(ContactsProfileActivity.this,"Error",Toast.LENGTH_LONG).show();
-                            //loadingBar.dismiss();
                         }
                     }
                 });
@@ -242,6 +234,19 @@ public class ContactsProfileActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) // Press Back Icon
+        {
+            Intent intent = new Intent(ContactsProfileActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void sendUserToMainActivity() {

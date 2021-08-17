@@ -13,27 +13,9 @@
         android:id="@+id/gallery_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/gallery_linear_layout"
-        android:layout_below="@+id/gallery_fragment_toolbar">
+        android:layout_below="@+id/gallery_fragment_toolbar"
+        android:background="@drawable/bluebackground">
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <LinearLayout
-        android:id="@+id/gallery_linear_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center">
-
-        <Button
-            android:id="@+id/add_image_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/oval_shape"
-            android:text="+ Upload Photo"
-            android:textSize="15sp"
-            android:textAllCaps="false"
-            android:padding="10dp"/>
-
-    </LinearLayout>
 </RelativeLayout>
