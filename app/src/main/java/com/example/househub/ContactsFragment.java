@@ -196,7 +196,7 @@ public class ContactsFragment extends Fragment {
     private void addContact() {
         final String contactsKey = ContactsRef.push().getKey();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         builder.setView(inflater.inflate(R.layout.contacts_add_dialog, null))

@@ -152,7 +152,7 @@ public class CalendarFragment extends Fragment {
     private void addEvent() {
         final String eventKey = EventsRef.push().getKey();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         builder.setView(inflater.inflate(R.layout.event_add_dialog, null))
