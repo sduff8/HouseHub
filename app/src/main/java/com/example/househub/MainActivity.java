@@ -111,38 +111,39 @@ public class MainActivity extends AppCompatActivity {
             sendUserToLoginActivity();
         }
         else{
-            VerifyUserProfile();
-            CheckUserFamily();
+            VerifyUserProfileAndFamily();
+            //CheckUserFamily();
         }
     }
 
-    private void CheckUserFamily(){
-        String currentUserID = mAuth.getCurrentUser().getUid();
+//    private void CheckUserFamily(){
+//        String currentUserID = mAuth.getCurrentUser().getUid();
+//
+//        databaseRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+//                if (!(snapshot.exists() && (snapshot.hasChild("family")))){
+//                    sendUserToFamilySettingsActivity();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+//            }
+//        });
+//    }
 
-        databaseRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                if (!(snapshot.exists() && (snapshot.hasChild("family")))){
-                    sendUserToFamilySettingsActivity();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-            }
-        });
-    }
-
-    private void VerifyUserProfile() {
+    private void VerifyUserProfileAndFamily() {
         String currentUserID = mAuth.getCurrentUser().getUid();
 
         databaseRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if (!(snapshot.exists() && (snapshot.hasChild("name")))){
-                    if(snapshot.child("name").getValue().toString().equals("")) {
-                        sendUserToEditProfile();
-                    }
+                    sendUserToEditProfile();
+                }
+                if (!(snapshot.exists() && (snapshot.hasChild("family")))){
+                    sendUserToFamilySettingsActivity();
                 }
             }
 

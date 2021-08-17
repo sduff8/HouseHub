@@ -50,7 +50,7 @@ public class HomeFragment extends Fragment {
     private Toolbar mToolbar;
     private TextView familyName;
     private ImageView familyPhoto;
-    private RecyclerView mRecyclerview;
+    //private RecyclerView mRecyclerview;
 
     private String familyNameId;
 
@@ -121,7 +121,7 @@ public class HomeFragment extends Fragment {
 
         familyName = view.findViewById(R.id.family_name_home);
         familyPhoto = view.findViewById(R.id.family_image_home);
-        mRecyclerview = view.findViewById(R.id.home_recyclerview);
+        //mRecyclerview = view.findViewById(R.id.home_recyclerview);
 
         mAuth = FirebaseAuth.getInstance();
         DatabaseRef = FirebaseDatabase.getInstance().getReference();
@@ -129,8 +129,8 @@ public class HomeFragment extends Fragment {
         FamilyRef = DatabaseRef.child("Families");
 
         //adapter = new HomeAdapter(getContext(), memberList);
-        mRecyclerview = view.findViewById(R.id.home_recyclerview);
-        mRecyclerview.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        //mRecyclerview = view.findViewById(R.id.home_recyclerview);
+        //mRecyclerview.setLayoutManager(new GridLayoutManager(getContext(), 3));
         //mRecyclerview.setAdapter(adapter);
 
         //RetrieveFamilyInfo();
@@ -145,7 +145,7 @@ public class HomeFragment extends Fragment {
 
         try {
             RetrieveFamilyInfo();
-            getMembers();
+            //getMembers();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -183,7 +183,7 @@ public class HomeFragment extends Fragment {
                 return viewHolder;
             }
         };
-        mRecyclerview.setAdapter(adapter);
+        //mRecyclerview.setAdapter(adapter);
 
         adapter.startListening();
     }
