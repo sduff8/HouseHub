@@ -83,8 +83,9 @@ public class SignupActivity extends AppCompatActivity {
                     if (task.isSuccessful()){
                         String currentUserID = mAuth.getUid();
                         databaseRef.child("Users").child(currentUserID).setValue("");
-
-                        setUserFirebaseMessagingTokenAndSignup();
+                        sendUserToLoginActivity();
+                        Toast.makeText(SignupActivity.this, "Account Created", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
                     }
                     else{
                         String message = task.getException().toString();
