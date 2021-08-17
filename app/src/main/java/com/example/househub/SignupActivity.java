@@ -82,7 +82,7 @@ public class SignupActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
                         String currentUserID = mAuth.getUid();
-                        databaseRef.child("Users").child(currentUserID).child("name").setValue("");
+                        databaseRef.child("Users").child(currentUserID).setValue("");
                         mAuth.signOut();
                         sendUserToLoginActivity();
                         Toast.makeText(SignupActivity.this, "Account Created", Toast.LENGTH_SHORT).show();
