@@ -140,7 +140,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if (!(snapshot.exists() && (snapshot.hasChild("name")))){
-                    sendUserToEditProfile();
+                    if(snapshot.child("name").getValue().toString().equals("")) {
+                        sendUserToEditProfile();
+                    }
                 }
             }
 

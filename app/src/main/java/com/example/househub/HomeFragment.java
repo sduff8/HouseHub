@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -132,19 +133,23 @@ public class HomeFragment extends Fragment {
         mRecyclerview.setLayoutManager(new GridLayoutManager(getContext(), 3));
         //mRecyclerview.setAdapter(adapter);
 
-        RetrieveFamilyInfo();
-        getMembers();
+        //RetrieveFamilyInfo();
+        //getMembers();
 
         return view;
     }
 
-//    @Override
-//    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//
-//        RetrieveFamilyInfo();
-//        getMembers();
-//    }
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        try {
+            RetrieveFamilyInfo();
+            getMembers();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private void getMembers() {
         if (mActivity == null){
@@ -164,6 +169,8 @@ public class HomeFragment extends Fragment {
                 if(Objects.equals(modelFamilyId, familyNameId)) {
                     holder.memberUsername.setText(model.getName());
                     Glide.with(getContext()).load(model.getImage()).placeholder(R.drawable.profile_image).into(holder.memberImage);
+                }else{
+                    holder.itemView.setVisibility(View.GONE);
                 }
             }
 

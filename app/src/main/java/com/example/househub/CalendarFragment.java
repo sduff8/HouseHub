@@ -215,6 +215,8 @@ public class CalendarFragment extends Fragment {
                     holder.eventTitle.setText(modelTitle);
                     holder.eventDescription.setText(modelDescription);
                     holder.eventTime.setText(modelTime);
+                }else {
+                    holder.itemView.setVisibility(View.GONE);
                 }
             }
 
